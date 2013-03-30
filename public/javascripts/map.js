@@ -8,17 +8,22 @@ var map={
     },
     geoip:{
 	//geolocation functions
-    }
+    },
     markers:{
 	//markers on the map
 	
     },
     route:{
 	//routes on the map
-	display,
-	service,
-	calculate,	
+	init:function(){
+	}
+    },
+    prefs:{
+	//variables that store preferences
     }
+    display:{
+	//functions that augment the layout
+    },
     server:{
 	//ajax functions for phoning home
     }
