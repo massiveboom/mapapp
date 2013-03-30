@@ -1,8 +1,13 @@
-body {
-  padding: 50px;
+/*@charset "UTF-8";
+ CSS Document */
+
+/*body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
 a {
   color: #00B7FF;
 }
+*/
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+#map{ height: 100% }

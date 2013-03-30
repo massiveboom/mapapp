@@ -1,56 +1,48 @@
-console.log('hi.');
 var map={
     init:function(){
-	var latlng = new google.maps.LatLng(51.764696,5.526042);
-	// set direction render options
-	var rendererOptions = { draggable: true };
-	directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-	var myOptions = {
-	    zoom: 14,
-	    center: latlng,
-	    mapTypeId: google.maps.MapTypeId.ROADMAP,
-	    mapTypeControl: false
+	var mapOptions = {
+	    center: new google.maps.LatLng(37.09024, -95.712891),
+	    zoom: 4,
+	    mapTypeId: google.maps.MapTypeId.TERRAIN
 	};
-	// add the map to the map placeholder
-	var map = new google.maps.Map(document.getElementById("map"),myOptions);
-	directionsDisplay.setMap(map);
-	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
-	// Add a marker to the map for the end-point of the directions.
-	var marker = new google.maps.Marker({
-	    position: latlng, 
-	    map: map, 
-	    title:"Rodderhof, Oss"
-	}); 
+	map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
     },
     utils:{//commonly repeated code
 	
     },
-    canvas:{
-	//the actual map
-	
-    },
-    geoip:{
+    geo:{
 	//geolocation functions
 	
     },
     markers:{
 	//markers on the map
+	//add marker
+	//remove marker
 	
     },
     route:{
 	//routes on the map
-
+	//create path 
     },
     prefs:{
 	//variables that store preferences
-
+	mapOptions : {
+	    zoom: 4,
+   	    center: new google.maps.LatLng(37.09024, -95.712891),
+   	    mapTypeId: google.maps.MapTypeId.TERRAIN
+   	}
+    },
+    listeners:{
+	//event listeners go here
     },
     display:{
 	//functions that augment the layout
-	init:function(){
-	    $(window).resize(function() {
-		$("#map").css("width",($(window).width())+"px")
-	    });
+	init:function(callback){
+	    //$("#map").css("width",($(window).width())+"px");
+	    if(callback){
+		console.log('yo dawg');
+		callback();
+	    }
 	}
     },
     server:{
@@ -58,7 +50,4 @@ var map={
     }
 }
 
-$(document).ready(function(){
-    console.log('starting');
-    map.init();
-});
+google.maps.event.addDomListener(window, 'load', map.init);
