@@ -11,3 +11,24 @@ a {
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0 }
 #map{ height: 100% }
+
+#buttons {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.5);
+	border:1px solid rgba(0, 0, 0, 0.75);
+	top: 30px;
+	right: 6px;
+	width: 102px;
+	height:100px;
+	color: #fff;
+}
+
+#buttons ul {
+	margin:0;
+	margin-left: 20px;
+	padding: 0;
+}
+
+#buttons a {
+	color: #91DAFF;
+}
