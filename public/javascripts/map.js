@@ -12,6 +12,11 @@ $(document).ready(function(){
 	    $('body').on('click',function(event){
 		console.log('clicked');
 		console.log(event);
+		//test markers
+		var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
+		console.log("test1");
+		addMarker(testlocation);
+		console.log("test2");
 	    });	
 	},
 	utils:{//commonly repeated code
@@ -21,8 +26,17 @@ $(document).ready(function(){
 	    //markers on the map
 	    //add marker
 	    //remove marker
-	    addMarker:function(){},
-	    removeMarker:function(){},
+		addMarker:function(location){
+			console.log("fuckall");
+			var testmarker = new.google.maps.Marker(
+				{
+				position: location,
+				map: map.canvas,
+				draggable: true
+				}
+			);
+		},
+		removeMarker:function(){},
 	},
 	route:{
 	    //routes on the map
