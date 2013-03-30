@@ -4,7 +4,11 @@ $(document).ready(function(){
 	    //load api resources
 	    map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
 	    map.geocoder = new google.maps.Geocoder();
-
+           
+            map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
+		console.log(['click',e]);
+	    });
+            
 	    //event listeners go here
 	    $('body').on('click',function(event){
 		console.log('clicked');
@@ -12,15 +16,9 @@ $(document).ready(function(){
 		//test markers
 		var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
 		console.log("test1");
-		addMarker(testlocation);
+		map.markers.addMarker(testlocation);
 		console.log("test2");
 	    });	
-	},
-	utils:{//commonly repeated code
-	    //event listeners
-	    map.listener.mapClick=google.maps.event.addListener(map.canvas, 'click', function(e) {
-		console.log(['click',e]);
-	    });
 	},
 	listener:{},
 	utils:{//commonly repeated code
@@ -45,16 +43,16 @@ $(document).ready(function(){
 	    //markers on the map
 	    //add marker
 	    //remove marker
-		addMarker:function(location){
-			console.log("fuckall");
-			var testmarker = new.google.maps.Marker(
-				{
-				position: location,
-				map: map.canvas,
-				draggable: true
-				}
-			);
-		},
+	    addMarker:function(location){
+		console.log("fuckall");
+		var testmarker = new google.maps.Marker(
+		    {
+			position: location,
+			map: map.canvas,
+			draggable: true
+		    }
+		);
+	    },
 		removeMarker:function(){},
 	},
 	route:{
