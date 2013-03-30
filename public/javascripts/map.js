@@ -47,7 +47,11 @@ var map={
     },
     display:{
 	//functions that augment the layout
-
+	init:function(){
+	    $(window).resize(function() {
+		$("#map").css("width",($(window).width())+"px")
+	    });
+	}
     },
     server:{
 	//ajax functions for phoning home
