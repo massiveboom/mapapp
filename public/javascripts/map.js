@@ -8,7 +8,8 @@ $(document).ready(function(){
 	    //event listeners
 	    map.listener.click=google.maps.event.addListener(map.canvas, 'click', function(e) {
 		console.log(['click',e]);
-	    });	
+	    });
+
 	},
 	listener:{},
 	utils:{//commonly repeated code
@@ -32,10 +33,7 @@ $(document).ready(function(){
    		center: new google.maps.LatLng(37.09024, -95.712891),
    		mapTypeId: google.maps.MapTypeId.TERRAIN
    	    }
-	},
-	display:{
-	    //functions that augment the layout
-	},
+	}
 	server:{
 	    //ajax functions for phoning home
 	}
