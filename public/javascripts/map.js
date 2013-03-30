@@ -35,15 +35,15 @@ $(document).ready(function(){
 	    mapOptions : {
 		zoom: 4,
    		center: new google.maps.LatLng(37.09024, -95.712891),
-   		mapTypeId: google.maps.MapTypeId.TERRAIN,
-   		sampleData: ['/sample data/6800 E Tennessee Ave.kml',
-					 '/sample data/6800 E Tennessee Ave(2).kml',
-					 '/sample data/6800 E Tennessee Ave(3).kml',
-					 '/sample data/6800 E Tennessee Ave(4).kml',
-					 '/sample data/6800 E Tennessee Ave(5).kml',
-					 '/sample data/6800 E Tennessee Ave(6).kml',
-					 '/sample data/6800 E Tennessee Ave(7).kml']
-   	    }
+   		mapTypeId: google.maps.MapTypeId.TERRAIN
+   	    },
+	    sampleData: ['/sample data/6800 E Tennessee Ave.kml',
+			 '/sample data/6800 E Tennessee Ave(2).kml',
+			 '/sample data/6800 E Tennessee Ave(3).kml',
+			 '/sample data/6800 E Tennessee Ave(4).kml',
+			 '/sample data/6800 E Tennessee Ave(5).kml',
+			 '/sample data/6800 E Tennessee Ave(6).kml',
+			 '/sample data/6800 E Tennessee Ave(7).kml']
 	}
 	server:{
 	    //ajax functions for phoning home
