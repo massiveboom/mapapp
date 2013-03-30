@@ -1,13 +1,10 @@
 $(document).ready(function(){
-    var map={
+    window.map={
 	init:function(){
-	    var mapOptions = {
-		center: new google.maps.LatLng(37.09024, -95.712891),
-		zoom: 4,
-		mapTypeId: google.maps.MapTypeId.TERRAIN
-	    };
+	    //load api resources
 	    map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
 	    map.geocoder = new google.maps.Geocoder();
+
 	    //event listeners go here
 	    $('body').on('click',function(event){
 		console.log('clicked');
@@ -20,7 +17,24 @@ $(document).ready(function(){
 	    });	
 	},
 	utils:{//commonly repeated code
+	    //event listeners
+	    map.listener.click=google.maps.event.addListener(map.canvas, 'click', function(e) {
+		console.log(['click',e]);
+	    });
 	    
+
+
+
+
+	    
+	},	
+	listener:{},
+	utils:{//commonly repeated code
+		loadData: function() {},
+		loadAll: function() {},
+		
+		clearData: function() {},
+		clearAll: function() {}
 	},
 	markers:{
 	    //markers on the map
@@ -48,18 +62,15 @@ $(document).ready(function(){
 		zoom: 4,
    		center: new google.maps.LatLng(37.09024, -95.712891),
    		mapTypeId: google.maps.MapTypeId.TERRAIN
-   	    }
-	},
-	display:{
-	    //functions that augment the layout
-	    init:function(callback){
-		//$("#map").css("width",($(window).width())+"px");
-		if(callback){
-		    console.log('yo dawg');
-		    callback();
-		}
-	    }
-	},
+   	    },
+	    sampleData: ['/sample data/6800 E Tennessee Ave.kml',
+                         '/sample data/6800 E Tennessee Ave(2).kml',
+                         '/sample data/6800 E Tennessee Ave(3).kml',
+                         '/sample data/6800 E Tennessee Ave(4).kml',
+			 '/sample data/6800 E Tennessee Ave(5).kml',
+			 '/sample data/6800 E Tennessee Ave(6).kml',
+			 '/sample data/6800 E Tennessee Ave(7).kml']
+	}
 	server:{
 	    //ajax functions for phoning home
 	}
