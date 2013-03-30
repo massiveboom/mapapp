@@ -13,8 +13,7 @@ $(document).ready(function(){
 	listener:{},
 	utils:{//commonly repeated code
 	    loadData: function() {},
-	    loadAll: function() {},
-	    
+	    loadAll: function() {},	    
 	    clearData: function() {},
 	    clearAll: function() {},
             encodeAddress:function(location,callback){
