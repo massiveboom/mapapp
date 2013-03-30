@@ -12,9 +12,7 @@ $(document).ready(function(){
 	    $('body').on('click',function(event){
 		console.log('clicked');
 		console.log(event);
-	    });
-	
-	
+	    });	
 	},
 	utils:{//commonly repeated code
 	    
@@ -23,7 +21,8 @@ $(document).ready(function(){
 	    //markers on the map
 	    //add marker
 	    //remove marker
-	    
+	    addMarker:function(){},
+	    removeMarker:function(){},
 	},
 	route:{
 	    //routes on the map
@@ -51,7 +50,8 @@ $(document).ready(function(){
 	    //ajax functions for phoning home
 	}
     }
+    google.maps.event.addDomListener(window, 'load', map.init);
 });
 
 
-google.maps.event.addDomListener(window, 'load', map.init);
+
