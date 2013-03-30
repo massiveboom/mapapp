@@ -9,8 +9,13 @@ $(document).ready(function(){
 	    map.listener.click=google.maps.event.addListener(map.canvas, 'click', function(e) {
 		console.log(['click',e]);
 	    });
+	    
 
-	},
+
+
+
+	    
+	},	
 	listener:{},
 	utils:{//commonly repeated code
 		loadData: function() {},
@@ -38,9 +43,9 @@ $(document).ready(function(){
    		mapTypeId: google.maps.MapTypeId.TERRAIN
    	    },
 	    sampleData: ['/sample data/6800 E Tennessee Ave.kml',
-			 '/sample data/6800 E Tennessee Ave(2).kml',
-			 '/sample data/6800 E Tennessee Ave(3).kml',
-			 '/sample data/6800 E Tennessee Ave(4).kml',
+                         '/sample data/6800 E Tennessee Ave(2).kml',
+                         '/sample data/6800 E Tennessee Ave(3).kml',
+                         '/sample data/6800 E Tennessee Ave(4).kml',
 			 '/sample data/6800 E Tennessee Ave(5).kml',
 			 '/sample data/6800 E Tennessee Ave(6).kml',
 			 '/sample data/6800 E Tennessee Ave(7).kml']
