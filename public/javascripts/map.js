@@ -8,6 +8,7 @@ $(document).ready(function(){
             map.route.display = new google.maps.DirectionsRenderer(map.prefs.routeOptions);
             map.route.display.setMap(map.canvas);
             map.route.display.setPanel(map.data.route);
+	    map.route.elevation = new google.maps.ElevationService();
             map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
 		console.log(e);
 		console.log(map.data.clickMode);
