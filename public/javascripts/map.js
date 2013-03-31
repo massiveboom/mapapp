@@ -178,7 +178,6 @@ $(document).ready(function(){
 			store: [],
 			addMarker:function(location, name){
 				if(!name){
-					console.log(this);
 					var name = this.store.length;
 				}
 				while(this.store[name]){
