@@ -61,7 +61,8 @@ $(document).ready(function(){
 		},
 		overlays:{},
 		listener:{
-			marker:[]
+			markerClick:[],
+			markerDrop:[]
 		},
 		utils:{//commonly repeated code
 			centerMap:function(callback){
