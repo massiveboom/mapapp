@@ -212,13 +212,13 @@ $(document).ready(function(){
 			});
 		
 		if(map.marker.store.length > 1){
-//			map.route.store[name] = new google.maps.Polyline({
-
-//				strokeColor: "#FF0000",
-//				strokeOpacity: 1.0,
-//				strokeWeight: 10,
-//				map: map
-//			})
+			map.route.store[name] = new google.maps.Polyline({
+				path: [new google.maps.LatLng(37.4419, -122.1419), new google.maps.LatLng(location)],
+				strokeColor: "#FF0000",
+				strokeOpacity: 1.0,
+				strokeWeight: 10,
+				map: map
+			})
 		}
 
 
