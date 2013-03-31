@@ -13,7 +13,7 @@ $(document).ready(function(){
 	    });
 	    //test markers
 	    var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
-	    map.markers.addMarker(testlocation,"testmark");    
+	    map.marker.addMarker(testlocation,"testmark");    
 	    map.listener.uiClick = $('#buttons').on('click', 'a', function()
 	    {
 			switch($(this).attr('id'))
@@ -86,7 +86,7 @@ $(document).ready(function(){
                         callback(results);
                     }
                 });
-            }
+            },
             calcRoute: function(waypoints){
                 if(waypoints.length>1){
                     var origin,destination;
@@ -102,7 +102,7 @@ $(document).ready(function(){
                 }
             }            
 	},
-	markers:{
+	marker:{
 	    //markers on the map
 	    //add marker
 	    //remove marker
@@ -115,7 +115,7 @@ $(document).ready(function(){
 			,draggable: true
 		    }
 		);
-		console.log(map.markers.store);
+		console.log(map.marker.store);
 	    },
 	    removeMarker:function(targetMarker){
 		for(i in markers.store){ 
@@ -131,7 +131,7 @@ $(document).ready(function(){
 	prefs:{
 	    //variables that store preferences
             travelMode : 'BICYCLING',
-	    routeOptions = { draggable: true },
+	    routeOptions : { draggable: true },
 	    mapOptions : {
 		zoom: 4,
 		center: new google.maps.LatLng(37.09024, -95.712891),
