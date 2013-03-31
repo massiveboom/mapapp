@@ -73,7 +73,7 @@ $(document).ready(function(){
 			if(typeof(map.overlays[data]) !== "undefined")
 			{
 			    map.overlays[data].setMap(null);
-			    map.overlays[data].splice(0,1);
+
 			}
 		    }
 		},
