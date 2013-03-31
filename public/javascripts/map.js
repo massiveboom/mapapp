@@ -1,20 +1,21 @@
 $(document).ready(function(){
 	window.map={
+		self : this,
 		init:function(){
 			//load api resources
-			map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
-			map.geocoder = new google.maps.Geocoder();
-			map.route.service = new google.maps.DirectionsService();
-			map.route.display = new google.maps.DirectionsRenderer(map.prefs.routeOptions);
-			map.route.display.setMap(map.canvas);
-			map.route.display.setPanel(map.data.route);
-			map.route.elevation = new google.maps.ElevationService();
-			map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
+			self.canvas = new google.maps.Map(document.getElementById("map"),self.prefs.mapOptions);
+			self.geocoder = new google.maps.Geocoder();
+			self.route.service = new google.maps.DirectionsService();
+			self.route.display = new google.maps.DirectionsRenderer(self.prefs.routeOptions);
+			self.route.display.setMap(self.canvas);
+			self.route.display.setPanel(self.data.route);
+			self.route.elevation = new google.maps.ElevationService();
+			self.listener.mapClick = new google.maps.event.addListener(self.canvas, 'click', function(e) {
 				console.log(e);
-				console.log(map.data.clickMode);
-				switch(map.data.clickMode){
+				console.log(self.data.clickMode);
+				switch(self.data.clickMode){
 				case 'addMarker':
-					map.marker.addMarker(e.latLng);
+					self.marker.addMarker(e.latLng);
 					break;
 				case 'removeMarker':
 					break;
@@ -22,37 +23,37 @@ $(document).ready(function(){
 					break;
 				}
 			});
-			map.listener.uiClick = $('#buttons').on('click', 'a', function(){
+			self.listener.uiClick = $('#buttons').on('click', 'a', function(){
 				switch($(this).attr('id')){
 				case "addMarker":
-					map.data.clickMode='addMarker';
+					self.data.clickMode='addMarker';
 					break;
 
 				case "removeMarker":
-					map.data.clickMode='removeMarker';
+					self.data.clickMode='removeMarker';
 					break;
 
 				case "next":
-					var n = map.data.sampleData.shift();
-					map.utils.kml.load(n);
-					map.data.sampleData.push(n);
+					var n = self.data.sampleData.shift();
+					self.utils.kml.load(n);
+					self.data.sampleData.push(n);
 					break;
 
 				case "previous":
-					var p = map.data.sampleData.pop();
-					map.utils.kml.load(p);
-					map.data.sampleData.unshift(p);
+					var p = self.data.sampleData.pop();
+					self.utils.kml.load(p);
+					self.data.sampleData.unshift(p);
 					break;
 
 				case "all":
-					for(var i in map.data.sampleData){
-						map.utils.kml.load(map.data.sampleData[i]);
+					for(var i in self.data.sampleData){
+						self.utils.kml.load(self.data.sampleData[i]);
 					}
 					break;
 
 				case "clear":
-					for(var i in map.data.sampleData){
-						map.utils.kml.clear(map.data.sampleData[i]);
+					for(var i in self.data.sampleData){
+						self.utils.kml.clear(self.data.sampleData[i]);
 					}
 					break;
 				}
@@ -73,8 +74,8 @@ $(document).ready(function(){
 							console.log("moving to your location");
 							console.log(position);
 		  					currentPos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-							map.canvas.setCenter(currentPos);
-							map.canvas.setZoom(14);
+							self.canvas.setCenter(currentPos);
+							self.canvas.setZoom(14);
 						},
 						function(error){
 							console.log('geolocation failed but your browser should support it? idkman.');
@@ -108,20 +109,20 @@ $(document).ready(function(){
 			kml:{
 				load: function(data){
 					if(typeof(data) === 'string'){
-						map.overlays[data] = new google.maps.KmlLayer(data);
-						map.overlays[data].setMap(map.canvas);
+						self.overlays[data] = new google.maps.KmlLayer(data);
+						self.overlays[data].setMap(self.canvas);
 					}
 				},
 				clear: function(data){
 					if(typeof(data) === 'string'){
-						if(typeof(map.overlays[data]) !== "undefined"){
-							map.overlays[data].setMap(null);
+						if(typeof(self.overlays[data]) !== "undefined"){
+							self.overlays[data].setMap(null);
 						}
 					}
 				}
 			},
 			encodeAddress: function(location,callback){
-				map.geocoder.geocode({ 'address': location}, function(results, status){
+				self.geocoder.geocode({ 'address': location}, function(results, status){
 					if(status != google.maps.GeocoderStatus.OK){
 						console.log("lookup encoded is:"+results[0].geometry.location);
 						results=false;
@@ -140,18 +141,18 @@ $(document).ready(function(){
 						origin: origin,
 						destination: destination,
 						unitSystem: google.maps.UnitSystem.IMPERIAL,
-						travelMode: google.maps.DirectionsTravelMode[map.prefs.travelMode]
+						travelMode: google.maps.DirectionsTravelMode[self.prefs.travelMode]
 					};
 					if(waypoints.length>1){
 						req[waypoints] = waypoints;
 					}
 					console.log('routing: ');
 					console.log(req);
-					map.route.service.route(req, function(response, status){
+					self.route.service.route(req, function(response, status){
 						console.log(response);
 						console.log(status);
 						if (status == google.maps.DirectionsStatus.OK){
-							map.route.display.setDirections(response);
+							self.route.display.setDirections(response);
 						}
 						else{// alert an error message when the route could nog be calculated.
 							if (status == 'ZERO_RESULTS') {
@@ -187,30 +188,30 @@ $(document).ready(function(){
 				while(this.store[name]){
 					name=name+"_";
 				}
-				map.marker.store[name] = new google.maps.Marker({
+				self.marker.store[name] = new google.maps.Marker({
 					position: location
-					,map: map.canvas
+					,map: self.canvas
 					,draggable: true
 				});
-				map.listener.markerClick[name]=google.maps.event.addListener(map.marker.store[name], 'click', function() {
+				self.listener.markerClick[name]=google.maps.event.addListener(self.marker.store[name], 'click', function() {
 					//handle marker click
 				});
-				map.listener.markerDrop[name]=google.maps.event.addListener(map.marker.store[name], 'dragend', function() {
+				self.listener.markerDrop[name]=google.maps.event.addListener(self.marker.store[name], 'dragend', function() {
 					//handle marker drop
 				});
-				console.log(map.marker.store);
-				if(map.marker.store.length > 1){
-					map.route.store[name] = new google.maps.Polyline({
+				console.log(self.marker.store);
+				if(self.marker.store.length > 1){
+					self.route.store[name] = new google.maps.Polyline({
 						path: [new google.maps.LatLng(37.4419, -122.1419), new google.maps.LatLng(location)],
 						strokeColor: "#FF0000",
 						strokeOpacity: 1.0,
 						strokeWeight: 10,
-						map: map.canvas
+						map: self.canvas
 					});
 				}
 			},
 			removeMarker:function(targetMarker){
-				console.log(map);
+				//console.log(self);
 				if(marker.store.length>0){
 					for(i in marker.store){
 						if (i == targetMarker) {
@@ -248,5 +249,5 @@ $(document).ready(function(){
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml']
 		}
 	};
-	google.maps.event.addDomListener(window, 'load', map.init);
+	google.maps.event.addDomListener(window, 'load', self.init);
 });
