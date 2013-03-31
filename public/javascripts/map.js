@@ -5,19 +5,53 @@ $(document).ready(function(){
 	    map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
 	    map.geocoder = new google.maps.Geocoder();
 	    
+	    var ctaLayer = new google.maps.KmlLayer('http://massiveboom.com:3044/sample data/6800 E Tennessee Ave.kml');
+		ctaLayer.setMap(map.canvas);
+	    
 	    //event listeners
 	    map.listener.click=google.maps.event.addListener(map.canvas, 'click', function(e) {
 		console.log(['click',e]);
 	    });
+	    
+	    map.listener.uiClick = $('#buttons').on('click', 'a', function()
+	    {
+			switch($(this).attr('id'))
+			{
+				case "next":
+					map.utils.kml.load(map.prefs.sampleData[2]);
+					break;
+					
+				case "previous":
+				
+					break;
+					
+				case "all":
+					map.utils.kml.load(map.prefs.sampleData);
+					break;
+					
+				case "clear":
+					map.utils.kml.clear(map.prefs.sampleData);
+					break;
+			}
+		});
 
 	},
+	overlays:{},
 	listener:{},
 	utils:{//commonly repeated code
-		loadData: function() {},
-		loadAll: function() {},
-		
-		clearData: function() {},
-		clearAll: function() {}
+		kml:
+		{
+			load: function(data)
+			{
+				if(typeof(data) === 'string')
+				{
+					map.overlays[data] = new google.maps.KmlLayer(data);
+					map.overlays[data].setMap(map.canvas);
+				}
+			},
+			
+			clear: function() {},
+		}
 	},
 	markers:{
 	    //markers on the map
@@ -44,7 +78,7 @@ $(document).ready(function(){
 			 '/sample data/6800 E Tennessee Ave(5).kml',
 			 '/sample data/6800 E Tennessee Ave(6).kml',
 			 '/sample data/6800 E Tennessee Ave(7).kml']
-	}
+	},
 	server:{
 	    //ajax functions for phoning home
 	}
