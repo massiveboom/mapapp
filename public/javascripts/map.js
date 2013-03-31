@@ -1,53 +1,54 @@
 $(document).ready(function(){
-	window.map={
-		self : this,
-		init:function(){
+	window.map=(function(){
+		var init = function(){
 			//load api resources
-			self.canvas = new google.maps.Map(document.getElementById("map"),self.prefs.mapOptions);
-			self.geocoder = new google.maps.Geocoder();
-			self.route.service = new google.maps.DirectionsService();
-			self.route.display = new google.maps.DirectionsRenderer(self.prefs.routeOptions);
-			self.route.display.setMap(self.canvas);
-			self.route.display.setPanel(self.data.route);
-			self.route.elevation = new google.maps.ElevationService();
-			self.listener.mapClick = new google.maps.event.addListener(self.canvas, 'click', function(e) {
+			var butts='sdasd';
+			this.canvas = new google.maps.Map(document.getElementById("map"),prefs.mapOptions);
+			this.geocoder = new google.maps.Geocoder();
+			route.service = new google.maps.DirectionsService();
+			route.display = new google.maps.DirectionsRenderer(prefs.routeOptions);
+			route.display.setMap(this.canvas);
+			route.display.setPanel(data.route);
+			route.elevation = new google.maps.ElevationService();
+			listener.mapClick = new google.maps.event.addListener(this.canvas, 'click', function(e) {
 				console.log(e);
-				console.log(self.data.clickMode);
-				switch(self.data.clickMode){
+				console.log(data.clickMode);
+				switch(data.clickMode){
 				case 'addMarker':
-					self.marker.addMarker(e.latLng);
+					marker.addMarker(e.latLng);
 					break;
 				case 'removeMarker':
 					break;
 				default:
+					marker.addMarker(e.latLng);
 					break;
 				}
 			});
-			self.listener.uiClick = $('#buttons').on('click', 'a', function(){
+			listener.uiClick = $('#buttons').on('click', 'a', function(){
 				switch($(this).attr('id')){
 				case "addMarker":
-					self.data.clickMode='addMarker';
+					data.clickMode='addMarker';
 					break;
 
 				case "removeMarker":
-					self.data.clickMode='removeMarker';
+					data.clickMode='removeMarker';
 					break;
 
 				case "next":
-					var n = self.data.sampleData.shift();
-					self.utils.kml.load(n);
-					self.data.sampleData.push(n);
+					var n = data.sampleData.shift();
+					utils.kml.load(n);
+					data.sampleData.push(n);
 					break;
 
 				case "previous":
-					var p = self.data.sampleData.pop();
-					self.utils.kml.load(p);
-					self.data.sampleData.unshift(p);
+					var p = data.sampleData.pop();
+					utils.kml.load(p);
+					data.sampleData.unshift(p);
 					break;
 
 				case "all":
-					for(var i in self.data.sampleData){
-						self.utils.kml.load(self.data.sampleData[i]);
+					for(var i in data.sampleData){
+						utils.kml.load(self.data.sampleData[i]);
 					}
 					break;
 
@@ -59,13 +60,15 @@ $(document).ready(function(){
 				}
 
 			});
-		},
-		overlays:{},
-		listener:{
+
+		};
+		var d='dssddsds';
+		var overlays = {};
+		var listener = {
 			markerClick:[],
 			markerDrop:[]
-		},
-		utils:{//commonly repeated code
+		};
+		var utils={//commonly repeated code
 			centerMap:function(callback){
 				//set position to current location if available.
 				if(navigator.geolocation){
@@ -175,13 +178,15 @@ $(document).ready(function(){
 					});
 				}
 			}
-		},
-		marker:{
+		};
+
+		var marker={
 			//markers on the map
 			//add marker
 			//remove marker
 			store: [],
 			addMarker:function(location, name){
+				console.log(this);
 				if(!name){
 					var name = this.store.length;
 				}
@@ -198,6 +203,7 @@ $(document).ready(function(){
 				});
 				self.listener.markerDrop[name]=google.maps.event.addListener(self.marker.store[name], 'dragend', function() {
 					//handle marker drop
+					console.log(this);
 				});
 				console.log(self.marker.store);
 				if(self.marker.store.length > 1){
@@ -221,11 +227,11 @@ $(document).ready(function(){
 					}
 				}
 			}
-		},
-		route:{
+		};
+		var route={
 			store: []
-		},
-		prefs:{
+		};
+		var prefs={
 			//variables that store preferences
 			travelMode : 'BICYCLING',
 			routeOptions : { draggable: true },
@@ -234,11 +240,11 @@ $(document).ready(function(){
 				center: new google.maps.LatLng(37.09024, -95.712891),
 				mapTypeId: google.maps.MapTypeId.TERRAIN
 			}
-		},
-		server:{
+		};
+		var server={
 			//ajax functions for phoning home
-		},
-		data:{
+		};
+		var data={
 			//specific data for routes, etc
 			sampleData: ['http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave.kml',
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(2).kml',
@@ -247,7 +253,12 @@ $(document).ready(function(){
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(5).kml',
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(6).kml',
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml']
-		}
-	};
-	google.maps.event.addDomListener(window, 'load', self.init);
+		};
+		return {init:init};
+	})();
+	google.maps.event.addDomListener(window, 'load', function(){
+		map.init();
+		console.log('go');
+
+	});
 });
