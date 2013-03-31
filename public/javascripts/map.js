@@ -1,59 +1,60 @@
 $(document).ready(function(){
 	window.map={
 	init:function(){
-	    //load api resources
-	    map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
-	    map.geocoder = new google.maps.Geocoder();
-            map.route.service = new google.maps.DirectionsService();
-            map.route.display = new google.maps.DirectionsRenderer(map.prefs.routeOptions);
-            map.route.display.setMap(map.canvas);
-            map.route.display.setPanel(map.data.route);
-	    map.route.elevation = new google.maps.ElevationService();
-            map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
+		//load api resources
+		map.canvas = new google.maps.Map(document.getElementById("map"),map.prefs.mapOptions);
+		map.geocoder = new google.maps.Geocoder();
+		map.route.service = new google.maps.DirectionsService();
+		map.route.display = new google.maps.DirectionsRenderer(map.prefs.routeOptions);
+		map.route.display.setMap(map.canvas);
+		map.route.display.setPanel(map.data.route);
+		map.route.elevation = new google.maps.ElevationService();
+		map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
 		console.log(e);
 		console.log(map.data.clickMode);
 		switch(map.data.clickMode){
-		case 'addMarker':
-		    map.marker.addMarker(e.latLng);
-		    break;
-		case 'removeMarker':
-		    break;
-		default:
-		    break;
-		}
-	    });	
+			case 'addMarker':
+				map.marker.addMarker(e.latLng);
+				break;
+			case 'removeMarker':
+				break;
+			default:
+				break;
+			}
+		});	
 		
-	    map.listener.uiClick = $('#buttons').on('click', 'a', function(){
-		switch($(this).attr('id'))
+		map.listener.uiClick = $('#buttons').on('click', 'a', function()
 		{
-		case "next":
-		    var next = map.data.sampleData.shift();
-		    map.utils.kml.load(next);			
-		    map.data.sampleData.push(next);
-		    break;
-		    
-		case "previous":
-		    var previous = map.data.sampleData.pop();
-		    map.utils.kml.load(previous);
-		    
-		    map.data.sampleData.unshift(previous);
-		    break;
-		    
-		case "all":
-		    for(var i in map.data.sampleData)
-		    {
-			map.utils.kml.load(map.data.sampleData[i]);
-		    }
-		    break;
-		    
-		case "clear":
-		    for(var i in map.data.sampleData)
-		    {
-			map.utils.kml.clear(map.data.sampleData[i]);
-		    }
-		    break;
-		}
-	    });
+			switch($(this).attr('id'))
+			{
+				case "next":
+					var next = map.data.sampleData.shift();
+					map.utils.kml.load(next);			
+					map.data.sampleData.push(next);
+					break;
+					
+				case "previous":
+					var previous = map.data.sampleData.pop();
+					map.utils.kml.load(previous);
+					
+					map.data.sampleData.unshift(previous);
+					break;
+					
+				case "all":
+					for(var i in map.data.sampleData)
+					{
+					map.utils.kml.load(map.data.sampleData[i]);
+					}
+					break;
+					
+				case "clear":
+					for(var i in map.data.sampleData)
+					{
+					map.utils.kml.clear(map.data.sampleData[i]);
+					}
+					break;
+			}
+		});
 	},
 	overlays:{},
 	listener:{},
