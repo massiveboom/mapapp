@@ -56,6 +56,7 @@ $(document).ready(function(){
 					}
 					break;
 				}
+
 			});
 		},
 		overlays:{},
@@ -83,7 +84,6 @@ $(document).ready(function(){
 					callback(false);
 				}
 			},
-
 			ticker:{
 				active:false,
 				interval:5000,
@@ -112,26 +112,23 @@ $(document).ready(function(){
 					}
 				},
 				clear: function(data){
-					if(typeof(data) === 'string')
-					{
-						if(typeof(map.overlays[data]) !== "undefined")
-						{
+					if(typeof(data) === 'string'){
+						if(typeof(map.overlays[data]) !== "undefined"){
 							map.overlays[data].setMap(null);
 						}
 					}
 				}
 			},
-
 			encodeAddress: function(location,callback){
 				map.geocoder.geocode({ 'address': location}, function(results, status){
-							      if(status != google.maps.GeocoderStatus.OK){
-								      console.log("lookup encoded is:"+results[0].geometry.location);
-								      results=false;
-							      }
-							      if(callback){
-								      callback(results);
-							      }
-						      });
+					if(status != google.maps.GeocoderStatus.OK){
+						console.log("lookup encoded is:"+results[0].geometry.location);
+						results=false;
+					}
+					if(callback){
+						callback(results);
+					}
+				});
 			},
 			calcRoute: function(waypoints){
 				if(waypoints.length>1){
@@ -147,11 +144,11 @@ $(document).ready(function(){
 					if(waypoints.length>1){
 						req[waypoints] = waypoints;
 					}
-					map.route.service.route(request, function(response, status) {
-						if (status == google.maps.DirectionsStatus.OK) {
+					map.route.service.route(request, function(response, status){
+						if (status == google.maps.DirectionsStatus.OK){
 							map.route.display.setDirections(response);
-						} else {
-							// alert an error message when the route could nog be calculated.
+						}
+						else{// alert an error message when the route could nog be calculated.
 							if (status == 'ZERO_RESULTS') {
 								console.log('No route could be found between the origin and destination.');
 							} else if (status == 'UNKNOWN_ERROR') {
@@ -201,7 +198,55 @@ $(document).ready(function(){
 				});
 				console.log(map.marker.store);
 			},
+			removeMarker:function(targetMarker){
+				console.log(map);
+				if(marker.store.length>0){
+					for(i in marker.store){
+						if (i == targetMarker) {
+							marker.store[i].setMap(null);
+							marker.store[i].splice(0,1);
+						};
+					}
+				}
+			}
+		},
+		marker:{
+			//markers on the map
+			//add marker
+			//remove marker
+			store: [],
+			addMarker:function(location, name){
+				if(!name){
+					console.log(this);
+					var name = this.store.length;
+				}
+				while(this.store[name]){
+					name=name+"_";
+				}
+				map.marker.store[name] = new google.maps.Marker({
+					position: location
+					,map: map.canvas
+					,draggable: true
+				});
 
+				if(map.marker.store.length > 1){
+					//			map.route.store[name] = new google.maps.Polyline({
+					//				strokeColor: "#FF0000",
+					//				strokeOpacity: 1.0,
+					//				strokeWeight: 10,
+					//				map: map
+					//			})
+				}
+
+
+				map.listener.markerClick[name]=google.maps.event.addListener(map.marker.store[name], 'click', function() {
+					//handle marker click
+				});
+				map.listener.markerDrop[name]=google.maps.event.addListener(map.marker.store[name], 'dragend', function() {
+					//handle marker drop
+				});
+				console.log(map.marker.store);
+			},
 			removeMarker:function(targetMarker){
 				console.log(map);
 				if(marker.store.length>0){
@@ -215,6 +260,7 @@ $(document).ready(function(){
 			}
 		},
 		route:{
+			store: []
 		},
 		prefs:{
 			//variables that store preferences
@@ -240,6 +286,5 @@ $(document).ready(function(){
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml']
 		}
 	};
-
 	google.maps.event.addDomListener(window, 'load', map.init);
 });
