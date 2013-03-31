@@ -130,7 +130,7 @@ $(document).ready(function(){
 					}
 				});
 			},
-			calcRoute: function(waypoints){
+			calcRoute: function(waypoints,callback){
 				if(waypoints.length>1){
 					var origin,destination;
 					origin=waypoints.splice(0,1);
@@ -165,6 +165,7 @@ $(document).ready(function(){
 								console.log("There was an unknown error in your request. Requeststatus: nn"+status);
 							}
 						}
+						callback(response,status);
 					});
 				}
 			}
@@ -179,17 +180,14 @@ $(document).ready(function(){
 					console.log(this);
 					var name = this.store.length;
 				}
-
 				while(this.store[name]){
 					name=name+"_";
 				}
-
 				map.marker.store[name] = new google.maps.Marker({
 					position: location
 					,map: map.canvas
 					,draggable: true
 				});
-
 				map.listener.markerClick[name]=google.maps.event.addListener(map.marker.store[name], 'click', function() {
 					//handle marker click
 				});
@@ -203,58 +201,9 @@ $(document).ready(function(){
 						strokeColor: "#FF0000",
 						strokeOpacity: 1.0,
 						strokeWeight: 10,
-						map: map
+						map: map.canvas
 					});
 				}
-			},
-			removeMarker:function(targetMarker){
-				console.log(map);
-				if(marker.store.length>0){
-					for(i in marker.store){
-						if (i == targetMarker) {
-							marker.store[i].setMap(null);
-							marker.store[i].splice(0,1);
-						};
-					}
-				}
-			}
-		},
-		marker:{
-			//markers on the map
-			//add marker
-			//remove marker
-			store: [],
-			addMarker:function(location, name){
-				if(!name){
-					console.log(this);
-					var name = this.store.length;
-				}
-				while(this.store[name]){
-					name=name+"_";
-				}
-				map.marker.store[name] = new google.maps.Marker({
-					position: location
-					,map: map.canvas
-					,draggable: true
-				});
-
-				if(map.marker.store.length > 1){
-					//			map.route.store[name] = new google.maps.Polyline({
-					//				strokeColor: "#FF0000",
-					//				strokeOpacity: 1.0,
-					//				strokeWeight: 10,
-					//				map: map
-					//			})
-				}
-
-
-				map.listener.markerClick[name]=google.maps.event.addListener(map.marker.store[name], 'click', function() {
-					//handle marker click
-				});
-				map.listener.markerDrop[name]=google.maps.event.addListener(map.marker.store[name], 'dragend', function() {
-					//handle marker drop
-				});
-				console.log(map.marker.store);
 			},
 			removeMarker:function(targetMarker){
 				console.log(map);
