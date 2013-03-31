@@ -15,19 +15,31 @@ $(document).ready(function(){
 			switch($(this).attr('id'))
 			{
 				case "next":
-					map.utils.kml.load(map.prefs.sampleData[2]);
+					var next = map.prefs.sampleData.shift();
+					map.utils.kml.load(next);
+					
+					map.prefs.sampleData.push(next);
 					break;
 					
 				case "previous":
-				
+					var previous = map.prefs.sampleData.pop();
+					map.utils.kml.load(previous);
+					
+					map.prefs.sampleData.unshift(previous);
 					break;
 					
 				case "all":
-					map.utils.kml.load(map.prefs.sampleData);
+					for(var i in map.prefs.sampleData)
+					{
+						map.utils.kml.load(map.prefs.sampleData[i]);
+					}
 					break;
 					
 				case "clear":
-					map.utils.kml.clear(map.prefs.sampleData);
+					for(var i in map.prefs.sampleData)
+					{
+						map.utils.kml.clear(map.prefs.sampleData[i]);
+					}
 					break;
 			}
 		});
@@ -57,7 +69,14 @@ $(document).ready(function(){
 				}
 			},
 			
-			clear: function() {},
+			clear: function(data)
+			{
+				if(typeof(data) === 'string')
+				{
+					if(typeof(map.overlays[data]) !== "undefined")
+						map.overlays[data].setMap(null);
+				}
+			},
 		},
             encodeAddress:function(location,callback){
                 map.geocoder.geocode( { 'address': location}, function(results, status) {
@@ -69,7 +88,7 @@ $(document).ready(function(){
                         callback(results);
                     }
                 });
-            }
+            },
             calcRoute: function(){
 
 
@@ -102,13 +121,13 @@ $(document).ready(function(){
 		center: new google.maps.LatLng(37.09024, -95.712891),
 		mapTypeId: google.maps.MapTypeId.TERRAIN
 	    },
-	    sampleData: ['/sample data/6800 E Tennessee Ave.kml',
-			 '/sample data/6800 E Tennessee Ave(2).kml',
-			 '/sample data/6800 E Tennessee Ave(3).kml',
-			 '/sample data/6800 E Tennessee Ave(4).kml',
-			 '/sample data/6800 E Tennessee Ave(5).kml',
-			 '/sample data/6800 E Tennessee Ave(6).kml',
-			 '/sample data/6800 E Tennessee Ave(7).kml']
+	    sampleData: ['http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave.kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(2).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(3).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(4).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(5).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(6).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml'],
 	},
 	server:{
 	    //ajax functions for phoning home
