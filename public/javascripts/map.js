@@ -9,50 +9,93 @@ $(document).ready(function(){
             map.route.display.setMap(map.canvas);
             map.route.display.setPanel(map.data.route);
             map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
-		console.log(['click',e]);
+		console.log(e);
+		console.log(map.data.clickMode);
+		switch(map.data.clickMode){
+		case 'addMarker':
+		    map.marker.addMarker(e.latLng);
+		    break;
+		case 'removeMarker':
+		    break;
+		default:
+		    break;
+		}
+	    });						    
+	    map.listener.uiClick = $('#buttons').on('click', 'a', function(){
+		switch($(this).attr('id'))
+		{
+		case "next":
+		    var next = map.prefs.sampleData.shift();
+		    map.utils.kml.load(next);		    
+		    map.prefs.sampleData.push(next);
+		    break;
+		    
+		case "previous":
+		    var previous = map.prefs.sampleData.pop();
+		    map.utils.kml.load(previous);
+		    
+		    map.prefs.sampleData.unshift(previous);
+		    break;
+		    
+		case "all":
+		    for(var i in map.prefs.sampleData)
+		    {
+			map.utils.kml.load(map.prefs.sampleData[i]);
+		    }
+		    break;
+		    
+		case "clear":
+		    for(var i in map.prefs.sampleData)
+		    {
+			map.utils.kml.clear(map.prefs.sampleData[i]);
+		    }
+		    break;
+		}
 	    });
-	    map.listener.uiClick = $('#buttons').on('click', 'a', function()
-	    {
-			switch($(this).attr('id'))
-			{
-				case "next":
-					var next = map.prefs.sampleData.shift();
-					map.utils.kml.load(next);
-					
-					map.prefs.sampleData.push(next);
-					break;
-					
-				case "previous":
-					var previous = map.prefs.sampleData.pop();
-					map.utils.kml.load(previous);
-					
-					map.prefs.sampleData.unshift(previous);
-					break;
-					
-				case "all":
-					for(var i in map.prefs.sampleData)
-					{
-						map.utils.kml.load(map.prefs.sampleData[i]);
-					}
-					break;
-					
-				case "clear":
-					for(var i in map.prefs.sampleData)
-					{
-						map.utils.kml.clear(map.prefs.sampleData[i]);
-					}
-					break;
-			}
-		});
-	    //event listeners go here
-	    $('body').on('click',function(event){
-		console.log('clicked');
-		console.log(event);
-	    });	
 	},
 	overlays:{},
 	listener:{},
 	utils:{//commonly repeated code
+	    centerMap:function(callback){		
+		//set position to current location if available.
+		if(navigator.geolocation) {
+   		    navigator.geolocation.getCurrentPosition(
+			function(position) {
+			    console.log("moving to your location");
+			    console.log(position);
+    	  		    currentPos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+   		  	    map.canvas.setCenter(currentPos);
+			    map.canvas.setZoom(14);
+    			},
+			function(error) {
+			    console.log('geolocation failed but your browser should support it? idkman.');
+			    console.log(error);
+   			});
+   		}
+		else{
+		    callback(false);
+		}	
+	    },
+	    ticker:{
+		active:false,
+		interval:5000,    
+		maxInterval:60000, 
+		minInterval:1000, 
+		start: function(){
+		    active=true;
+		    console.log();
+		},
+		stop: function(){
+		    active=false;
+		},
+		init:function(){
+		    console.log('thump');
+		    active=true;
+		    var tick=setTimeout(function(){
+			//if stuff happened, reduce interval. else, increase
+		    },interval);
+		}
+	    },
 	    kml:
 	    {		
 		load: function(data)
@@ -75,7 +118,7 @@ $(document).ready(function(){
 		    }
 		},
 	    },
-            encodeAddress:function(location,callback){
+            encodeAddress: function(location,callback){
                 map.geocoder.geocode( { 'address': location}, function(results, status) {
       		    if(status != google.maps.GeocoderStatus.OK){
 			console.log("lookup encoded is:"+results[0].geometry.location);	
@@ -107,6 +150,13 @@ $(document).ready(function(){
 	    //remove marker
 	    store: [],
 	    addMarker:function(location, name){
+		if(!name){
+		    console.log(this);
+		    var name = this.store.length;
+		}
+		while(this.store[name]){
+		    name=name+"_";
+		}
 		map.marker.store[name] = new google.maps.Marker(
 		    {
 			position: location
@@ -117,11 +167,14 @@ $(document).ready(function(){
 		console.log(map.marker.store);
 	    },
 	    removeMarker:function(targetMarker){
-		for(i in markers.store){ 
-		    if (i == targetMarker) {
-			markers.store[i].setMap(null);
-			markers.store[i].splice(0,1);
-		    };
+		console.log(map);
+		if(marker.store.length>0){
+		    for(i in marker.store){ 
+			if (i == targetMarker) {
+			    marker.store[i].setMap(null);
+			    marker.store[i].splice(0,1);
+			};
+		    }
 		}
 	    },
 	},
@@ -149,6 +202,7 @@ $(document).ready(function(){
 	},
         data:{
             //specific data for routes, etc
+	    //clickMode:"addMarker"
         }
     }
     google.maps.event.addDomListener(window, 'load', map.init);
