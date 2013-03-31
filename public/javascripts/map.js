@@ -25,6 +25,8 @@ $(document).ready(function(){
 		
 		map.listener.uiClick = $('#buttons').on('click', 'a', function()
 		{
+			console.log(map.data.sampleData);
+			
 			switch($(this).attr('id'))
 			{
 				case "next":
@@ -43,14 +45,14 @@ $(document).ready(function(){
 				case "all":
 					for(var i in map.data.sampleData)
 					{
-					map.utils.kml.load(map.data.sampleData[i]);
+						map.utils.kml.load(map.data.sampleData[i]);
 					}
 					break;
 					
 				case "clear":
 					for(var i in map.data.sampleData)
 					{
-					map.utils.kml.clear(map.data.sampleData[i]);
+						map.utils.kml.clear(map.data.sampleData[i]);
 					}
 					break;
 			}
@@ -114,8 +116,10 @@ $(document).ready(function(){
 			{
 				if(typeof(data) === 'string')
 				{
-				map.overlays[data] = new google.maps.KmlLayer(data);
-				map.overlays[data].setMap(map.canvas);
+					if(typeof(map.overlays[data]) === "undefined")
+						map.overlays[data] = new google.maps.KmlLayer(data);
+					
+					map.overlays[data].setMap(map.canvas);
 				}
 			},		
 			clear: function(data)
