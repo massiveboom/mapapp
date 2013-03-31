@@ -8,41 +8,35 @@ $(document).ready(function(){
             map.route.display = new google.maps.DirectionsRenderer(map.prefs.routeOptions);
             map.route.display.setMap(map.canvas);
             map.route.display.setPanel(map.data.route);
-
             map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
-
 		console.log(['click',e]);
-	    });	    
-	    map.listener.uiClick = $('body').on('click', '#buttons a', function(){
-		switch($(this).attr('id'))
-		{
-		case "next":
-		    map.utils.kml.load(map.prefs.sampleData[2]);
-		    break;
-		    
-		case "previous":
-		    
-		    break;
-		    
-		case "all":
-		    map.utils.kml.load(map.prefs.sampleData);
-		    break;
-		    
-		case "clear":
-		    map.utils.kml.clear(map.prefs.sampleData);
-		    break;
-		}
 	    });
-            
+	    //test markers
+	    var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
+	    map.markers.addMarker(testlocation,"testmark");    
+	    map.listener.uiClick = $('#buttons').on('click', 'a', function()
+						    {
+							switch($(this).attr('id'))
+							{
+							case "next":
+							    map.utils.kml.load(map.prefs.sampleData[2]);
+							    break;							    
+							case "previous":
+							    
+							    break;							    
+							case "all":
+							    map.utils.kml.load(map.prefs.sampleData);
+							    break;
+							    
+							case "clear":
+							    map.utils.kml.clear(map.prefs.sampleData);
+							    break;
+							}
+						    });
 	    //event listeners go here
 	    $('body').on('click',function(event){
 		console.log('clicked');
 		console.log(event);
-		//test markers
-		var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
-		console.log("test1");
-		map.markers.addMarker(testlocation);
-		console.log("test2");
 	    });	
 	},
 	overlays:{},
@@ -90,17 +84,25 @@ $(document).ready(function(){
 	    //markers on the map
 	    //add marker
 	    //remove marker
-	    addMarker:function(location){
-		console.log("fuckall");
-		var testmarker = new google.maps.Marker(
+	    store: [],
+	    addMarker:function(location, name){
+		map.marker.store[name] = new google.maps.Marker(
 		    {
-			position: location,
-			map: map.canvas,
-			draggable: true
+			position: location
+			,map: map.canvas
+			,draggable: true
 		    }
 		);
+		console.log(map.markers.store);
 	    },
-		removeMarker:function(){},
+	    removeMarker:function(targetMarker){
+		for(i in markers.store){ 
+		    if (i == targetMarker) {
+			markers.store[i].setMap(null);
+			markers.store[i].splice(0,1);
+		    };
+		}
+	    },
 	},
 	route:{
 	},
@@ -130,6 +132,3 @@ $(document).ready(function(){
     }
     google.maps.event.addDomListener(window, 'load', map.init);
 });
-
-
-
