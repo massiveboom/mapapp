@@ -15,24 +15,38 @@ $(document).ready(function(){
 	    var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
 	    map.markers.addMarker(testlocation,"testmark");    
 	    map.listener.uiClick = $('#buttons').on('click', 'a', function()
-						    {
-							switch($(this).attr('id'))
-							{
-							case "next":
-							    map.utils.kml.load(map.prefs.sampleData[2]);
-							    break;							    
-							case "previous":
-							    
-							    break;							    
-							case "all":
-							    map.utils.kml.load(map.prefs.sampleData);
-							    break;
-							    
-							case "clear":
-							    map.utils.kml.clear(map.prefs.sampleData);
-							    break;
-							}
-						    });
+	    {
+			switch($(this).attr('id'))
+			{
+				case "next":
+					var next = map.prefs.sampleData.shift();
+					map.utils.kml.load(next);
+					
+					map.prefs.sampleData.push(next);
+					break;
+					
+				case "previous":
+					var previous = map.prefs.sampleData.pop();
+					map.utils.kml.load(previous);
+					
+					map.prefs.sampleData.unshift(previous);
+					break;
+					
+				case "all":
+					for(var i in map.prefs.sampleData)
+					{
+						map.utils.kml.load(map.prefs.sampleData[i]);
+					}
+					break;
+					
+				case "clear":
+					for(var i in map.prefs.sampleData)
+					{
+						map.utils.kml.clear(map.prefs.sampleData[i]);
+					}
+					break;
+			}
+		});
 	    //event listeners go here
 	    $('body').on('click',function(event){
 		console.log('clicked');
@@ -43,7 +57,7 @@ $(document).ready(function(){
 	listener:{},
 	utils:{//commonly repeated code
 	    kml:
-	    {
+	    {		
 		load: function(data)
 		{
 		    if(typeof(data) === 'string')
@@ -52,7 +66,15 @@ $(document).ready(function(){
 			map.overlays[data].setMap(map.canvas);
 		    }
 		},
-		clear: function() {},
+		
+		clear: function(data)
+		{
+		    if(typeof(data) === 'string')
+		    {
+			if(typeof(map.overlays[data]) !== "undefined")
+			    map.overlays[data].setMap(null);
+		    }
+		},
 	    },
             encodeAddress:function(location,callback){
                 map.geocoder.geocode( { 'address': location}, function(results, status) {
@@ -109,19 +131,19 @@ $(document).ready(function(){
 	prefs:{
 	    //variables that store preferences
             travelMode : 'BICYCLING',
+	    routeOptions = { draggable: true },
 	    mapOptions : {
 		zoom: 4,
 		center: new google.maps.LatLng(37.09024, -95.712891),
 		mapTypeId: google.maps.MapTypeId.TERRAIN
 	    },
-            routeOptions = { draggable: true };
-	    sampleData: ['/sample data/6800 E Tennessee Ave.kml',
-			 '/sample data/6800 E Tennessee Ave(2).kml',
-			 '/sample data/6800 E Tennessee Ave(3).kml',
-			 '/sample data/6800 E Tennessee Ave(4).kml',
-			 '/sample data/6800 E Tennessee Ave(5).kml',
-			 '/sample data/6800 E Tennessee Ave(6).kml',
-			 '/sample data/6800 E Tennessee Ave(7).kml']
+	    sampleData: ['http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave.kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(2).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(3).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(4).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(5).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(6).kml',
+			 'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml']
 	},
 	server:{
 	    //ajax functions for phoning home
