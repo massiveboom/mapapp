@@ -134,8 +134,8 @@ $(document).ready(function(){
 			calcRoute: function(waypoints,callback){
 				if(waypoints.length>1){
 					var origin,destination;
-					origin=waypoints.splice(0,1);
-					destination=waypoints.pop();
+					origin=waypoints.splice(0,1)[0].position;
+					destination=waypoints.pop().position;
 					var req = {
 						origin: origin,
 						destination: destination,
@@ -145,7 +145,11 @@ $(document).ready(function(){
 					if(waypoints.length>1){
 						req[waypoints] = waypoints;
 					}
-					map.route.service.route(request, function(response, status){
+					console.log('routing: ');
+					console.log(req);
+					map.route.service.route(req, function(response, status){
+						console.log(response);
+						console.log(status);
 						if (status == google.maps.DirectionsStatus.OK){
 							map.route.display.setDirections(response);
 						}
