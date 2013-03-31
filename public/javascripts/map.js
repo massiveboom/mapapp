@@ -11,9 +11,6 @@ $(document).ready(function(){
             map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {
 		console.log(['click',e]);
 	    });
-	    //test markers
-	    var testlocation = new google.maps.LatLng(37.7699298, -122.4469157);
-	    map.marker.addMarker(testlocation,"testmark");    
 	    map.listener.uiClick = $('#buttons').on('click', 'a', function()
 	    {
 			switch($(this).attr('id'))
