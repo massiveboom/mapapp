@@ -9,6 +9,7 @@ $(document).ready(function(){
 	    map.route.display.setMap(map.canvas);
 	    map.route.display.setPanel(map.data.route);
 	    map.route.elevation = new google.maps.ElevationService();	    
+	    
 	    map.listener.mapClick = new google.maps.event.addListener(map.canvas, 'click', function(e) {		
 		console.log(e);
 		console.log(map.data.clickMode);
@@ -208,8 +209,19 @@ $(document).ready(function(){
 			position: location
 			,map: map.canvas
 			,draggable: true
-		    });
+			});
 		
+		if(map.marker.store.length > 1){
+//			map.route.store[name] = new google.maps.Polyline({
+
+//				strokeColor: "#FF0000",
+//				strokeOpacity: 1.0,
+//				strokeWeight: 10,
+//				map: map
+//			})
+		}
+
+
 		map.listener.markerClick[name]=google.maps.event.addListener(map.marker.store[name], 'click', function() {
 		    //handle marker click
 		});
@@ -217,13 +229,13 @@ $(document).ready(function(){
 		    //handle marker drop
 		});
 		console.log(map.marker.store);
-	    },
-	    
-	    removeMarker:function(targetMarker)
-	    {
+		},
+
+		removeMarker:function(targetMarker)
+		{
 		console.log(map);
 		if(marker.store.length>0){
-		    for(i in marker.store){ 
+			for(i in marker.store){ 
 			if (i == targetMarker) {
 			    marker.store[i].setMap(null);
 			    marker.store[i].splice(0,1);
@@ -233,6 +245,7 @@ $(document).ready(function(){
 	    },
 	},
 	route:{
+		store: []
 	},
 	prefs:{
 	    //variables that store preferences
