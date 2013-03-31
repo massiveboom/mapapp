@@ -62,14 +62,16 @@ $(document).ready(function(){
 			map.overlays[data] = new google.maps.KmlLayer(data);
 			map.overlays[data].setMap(map.canvas);
 		    }
-		},
-		
+		},		
 		clear: function(data)
 		{
 		    if(typeof(data) === 'string')
 		    {
 			if(typeof(map.overlays[data]) !== "undefined")
+			{
 			    map.overlays[data].setMap(null);
+
+			}
 		    }
 		},
 	    },
