@@ -99,8 +99,7 @@ $(document).ready(function(){
 		},
 		stop: function(){
 		    active=false;
-		},
-		
+		},		
 		init:function(){
 		    console.log('thump');
 		    active=true;
