@@ -58,8 +58,14 @@ $(document).ready(function(){
 						}
 						break;
 
+					case "center":
+						utils.centerMap();
+						break;
+
 					case "directions":
-						alert('get directions!');
+						console.log("Hey guys...");
+						console.log(marker.store);
+						utils.calcRoute(marker.store, function() {});
 						break;
 				}
 			});
