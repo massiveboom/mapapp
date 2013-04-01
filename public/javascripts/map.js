@@ -151,8 +151,8 @@ $(document).ready(function(){
 			calcRoute: function(waypoints,cb){
 				if(waypoints.length>1){
 					var origin,destination;
-					origin=waypoints.splice(0,1)[0].position;
-					destination=waypoints.pop().position;
+					origin=new waypoints.splice(0,1)[0].position;
+					destination=new waypoints.pop().position;
 					var req = {
 						origin: origin,
 						destination: destination,
@@ -209,7 +209,6 @@ $(document).ready(function(){
 				while(this.store[name]){
 					name=name+"_";
 				}
-				console.log[a,d];
 				this.store[name] = new google.maps.Marker({
 					position: location
 					,map: canvas
