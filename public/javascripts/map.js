@@ -26,36 +26,41 @@ $(document).ready(function(){
 			});
 			listener.uiClick = $('#buttons').on('click', 'a', function(){
 				switch($(this).attr('id')){
-				case "addMarker":
-					data.clickMode='addMarker';
-					break;
+					case "addMarker":
+						data.clickMode='addMarker';
+						break;
 
-				case "removeMarker":
-					data.clickMode='removeMarker';
-					break;
+					case "removeMarker":
+						data.clickMode='removeMarker';
+						break;
 
-				case "next":
-					var n = data.sampleData.shift();
-					utils.kml.load(n);
-					data.sampleData.push(n);
-					break;
+					case "next":
+						var n = data.sampleData.shift();
+						utils.kml.load(n);
+						data.sampleData.push(n);
+						break;
 
-				case "previous":
-					var p = data.sampleData.pop();
-					utils.kml.load(p);
-					data.sampleData.unshift(p);
-					break;
+					case "previous":
+						var p = data.sampleData.pop();
+						utils.kml.load(p);
+						data.sampleData.unshift(p);
+						break;
 
-				case "all":
-					for(var i in data.sampleData){
-						utils.kml.load(data.sampleData[i]);
-					}
-					break;
-				case "clear":
-					for(var j in data.sampleData){
-						utils.kml.clear(data.sampleData[j]);
-					}
-					break;
+					case "all":
+						for(var i in data.sampleData){
+							utils.kml.load(data.sampleData[i]);
+						}
+						break;
+
+					case "clear":
+						for(var i in data.sampleData){
+							utils.kml.clear(data.sampleData[i]);
+						}
+						break;
+
+					case "directions":
+						alert('get directions!');
+						break;
 				}
 			});
 		};
