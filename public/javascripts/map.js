@@ -1,14 +1,8 @@
 $(document).ready(function(){
 	window.map=(function(){
 		var canvas,geocoder,overlays = {};
-
-		var route={
-			store: []
-		};
-		var listener = {
-			markerClick:[],
-			markerDrop:[]
-		};
+		var route={store:[]};
+		var listener = {markerClick:[],markerDrop:[]};
 		var init = function(){
 			//load api resources
 			var b='sdasd';
@@ -24,8 +18,6 @@ $(document).ready(function(){
 				switch(data.clickMode){
 				case 'addMarker':
 					marker.addMarker(e.latLng);
-					break;
-				case 'removeMarker':
 					break;
 				default:
 					marker.addMarker(e.latLng);
@@ -59,20 +51,22 @@ $(document).ready(function(){
 						utils.kml.load(data.sampleData[i]);
 					}
 					break;
-
 				case "clear":
-					for(var i in data.sampleData){
-						utils.kml.clear(data.sampleData[i]);
+					for(var j in data.sampleData){
+						utils.kml.clear(data.sampleData[j]);
 					}
 					break;
 				}
-
 			});
-
 		};
 		var utils={//commonly repeated code
-			centerMap:function(callback){
-				//set position to current location if available.
+			callback:function(err,msg,cb){
+				if(cb){
+					cb(err,msg);
+				}
+
+			},
+			centerMap:function(cb){//set position to current location if available.
 				if(navigator.geolocation){
 					navigator.geolocation.getCurrentPosition(
 						function(position){
@@ -81,14 +75,17 @@ $(document).ready(function(){
 		  					currentPos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 							canvas.setCenter(currentPos);
 							canvas.setZoom(14);
+							utils.callback(null,currentPos,cb);
 						},
 						function(error){
-							console.log('geolocation failed but your browser should support it? idkman.');
+							utils.callback(false);
+							utils.callback(true,'geolocation failed but your browser should support it? idkman.',cb);
 							console.log(error);
 						});
+
 				}
 				else{
-					callback(false);
+					utils.callback(true,'Not supported',cb);
 				}
 			},
 			ticker:{
@@ -112,32 +109,42 @@ $(document).ready(function(){
 				}
 			},
 			kml:{
-				load: function(data){
+				load: function(data,cb){
 					if(typeof(data) === 'string'){
 						overlays[data] = new google.maps.KmlLayer(data);
 						overlays[data].setMap(canvas);
 					}
+					else{
+						if(cb){utils.callback(null,'not a string',cb);}
+					}
 				},
-				clear: function(data){
+				clear: function(data,cb){
 					if(typeof(data) === 'string'){
 						if(typeof(overlays[data]) !== "undefined"){
 							overlays[data].setMap(null);
+							if(cb){utils.callback(null,undefined,cb);}
 						}
+						else{
+							utils.callback(true,'can\'t clear undefined',cb);
+						}
+					}
+					else{
+						utils.callback(true,'not a string',cb);
 					}
 				}
 			},
-			encodeAddress: function(location,callback){
+			encodeAddress: function(location,cb){
 				geocoder.geocode({ 'address': location}, function(results, status){
 					if(status != google.maps.GeocoderStatus.OK){
 						console.log("lookup encoded is:"+results[0].geometry.location);
-						results=false;
+						utils.callback(true,status,cb);
 					}
-					if(callback){
-						callback(results);
+					else{
+						utils.callback(null,results,cb);
 					}
 				});
 			},
-			calcRoute: function(waypoints,callback){
+			calcRoute: function(waypoints,cb){
 				if(waypoints.length>1){
 					var origin,destination;
 					origin=waypoints.splice(0,1)[0].position;
@@ -176,7 +183,7 @@ $(document).ready(function(){
 								console.log("There was an unknown error in your request. Requeststatus: nn"+status);
 							}
 						}
-						callback(response,status);
+						cb(response,status);
 					});
 				}
 			}
