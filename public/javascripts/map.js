@@ -157,16 +157,22 @@ $(document).ready(function(){
 			calcRoute: function(waypoints,cb){
 				if(waypoints.length>1){
 					var origin,destination;
-					origin=new waypoints.splice(0,1)[0].position;
-					destination=new waypoints.pop().position;
+					var wp= waypoints;
+					origin = wp.shift().position;
+					destination = wp.pop().position;
 					var req = {
 						origin: origin,
 						destination: destination,
 						unitSystem: google.maps.UnitSystem.IMPERIAL,
 						travelMode: google.maps.DirectionsTravelMode[prefs.travelMode]
 					};
-					if(waypoints.length>1){
-						req[waypoints] = waypoints;
+					console.log(origin);
+					console.log(wp);
+					if(wp.length>0){
+						for(var i in wp){
+							wp[i]={location:wp[i].position,stopover:true};
+						}
+						req.waypoints=wp;
 					}
 					console.log('routing: ');
 					console.log(req);
