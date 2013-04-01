@@ -1,6 +1,14 @@
 $(document).ready(function(){
 	window.map=(function(){
-		var canvas,geocoder;
+		var canvas,geocoder,overlays = {};
+
+		var route={
+			store: []
+		};
+		var listener = {
+			markerClick:[],
+			markerDrop:[]
+		};
 		var init = function(){
 			//load api resources
 			var b='sdasd';
@@ -13,7 +21,6 @@ $(document).ready(function(){
 			route.elevation = new google.maps.ElevationService();
 			listener.mapClick = new google.maps.event.addListener(canvas, 'click', function(e) {
 				console.log(e);
-				console.log(data.clickMode);
 				switch(data.clickMode){
 				case 'addMarker':
 					marker.addMarker(e.latLng);
@@ -62,11 +69,6 @@ $(document).ready(function(){
 
 			});
 
-		};
-		var overlays = {};
-		var listener = {
-			markerClick:[],
-			markerDrop:[]
 		};
 		var utils={//commonly repeated code
 			centerMap:function(callback){
@@ -185,6 +187,9 @@ $(document).ready(function(){
 			//add marker
 			//remove marker
 			store: [],
+			markerUpdate:function(){
+
+			},
 			addMarker:function(location, name){
 				console.log(this);
 				if(!name){
@@ -201,6 +206,7 @@ $(document).ready(function(){
 				});
 				listener.markerClick[name]=google.maps.event.addListener(this.store[name], 'click', function() {
 					//handle marker click
+					//route to previous point if in add mode
 				});
 				listener.markerDrop[name]=google.maps.event.addListener(this.store[name], 'dragend', function() {
 					//handle marker drop
@@ -228,9 +234,6 @@ $(document).ready(function(){
 					}
 				}
 			}
-		};
-		var route={
-			store: []
 		};
 		var prefs={
 			//variables that store preferences
