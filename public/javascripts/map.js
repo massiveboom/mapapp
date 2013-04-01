@@ -5,7 +5,6 @@ $(document).ready(function(){
 		var listener = {markerClick:[],markerDrop:[]};
 		var init = function(){
 			//load api resources
-			var b='sdasd';
 			canvas = new google.maps.Map(document.getElementById("map"),prefs.mapOptions);
 			geocoder = new google.maps.Geocoder();
 			route.service = new google.maps.DirectionsService();
@@ -270,8 +269,6 @@ $(document).ready(function(){
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(6).kml',
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml']
 		};
-		var a=this;
-		var d='dssddsds';
 		return {init:init};
 	})();
 	google.maps.event.addDomListener(window, 'load', function(){
