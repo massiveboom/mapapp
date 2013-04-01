@@ -1,16 +1,17 @@
 $(document).ready(function(){
 	window.map=(function(){
+		var canvas,geocoder;
 		var init = function(){
 			//load api resources
-			var butts='sdasd';
-			this.canvas = new google.maps.Map(document.getElementById("map"),prefs.mapOptions);
-			this.geocoder = new google.maps.Geocoder();
+			var b='sdasd';
+			canvas = new google.maps.Map(document.getElementById("map"),prefs.mapOptions);
+			geocoder = new google.maps.Geocoder();
 			route.service = new google.maps.DirectionsService();
 			route.display = new google.maps.DirectionsRenderer(prefs.routeOptions);
-			route.display.setMap(this.canvas);
+			route.display.setMap(canvas);
 			route.display.setPanel(data.route);
 			route.elevation = new google.maps.ElevationService();
-			listener.mapClick = new google.maps.event.addListener(this.canvas, 'click', function(e) {
+			listener.mapClick = new google.maps.event.addListener(canvas, 'click', function(e) {
 				console.log(e);
 				console.log(data.clickMode);
 				switch(data.clickMode){
@@ -48,13 +49,13 @@ $(document).ready(function(){
 
 				case "all":
 					for(var i in data.sampleData){
-						utils.kml.load(self.data.sampleData[i]);
+						utils.kml.load(data.sampleData[i]);
 					}
 					break;
 
 				case "clear":
-					for(var i in self.data.sampleData){
-						self.utils.kml.clear(self.data.sampleData[i]);
+					for(var i in data.sampleData){
+						utils.kml.clear(data.sampleData[i]);
 					}
 					break;
 				}
@@ -62,7 +63,6 @@ $(document).ready(function(){
 			});
 
 		};
-		var d='dssddsds';
 		var overlays = {};
 		var listener = {
 			markerClick:[],
@@ -77,8 +77,8 @@ $(document).ready(function(){
 							console.log("moving to your location");
 							console.log(position);
 		  					currentPos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-							self.canvas.setCenter(currentPos);
-							self.canvas.setZoom(14);
+							canvas.setCenter(currentPos);
+							canvas.setZoom(14);
 						},
 						function(error){
 							console.log('geolocation failed but your browser should support it? idkman.');
@@ -112,20 +112,20 @@ $(document).ready(function(){
 			kml:{
 				load: function(data){
 					if(typeof(data) === 'string'){
-						self.overlays[data] = new google.maps.KmlLayer(data);
-						self.overlays[data].setMap(self.canvas);
+						overlays[data] = new google.maps.KmlLayer(data);
+						overlays[data].setMap(canvas);
 					}
 				},
 				clear: function(data){
 					if(typeof(data) === 'string'){
-						if(typeof(self.overlays[data]) !== "undefined"){
-							self.overlays[data].setMap(null);
+						if(typeof(overlays[data]) !== "undefined"){
+							overlays[data].setMap(null);
 						}
 					}
 				}
 			},
 			encodeAddress: function(location,callback){
-				self.geocoder.geocode({ 'address': location}, function(results, status){
+				geocoder.geocode({ 'address': location}, function(results, status){
 					if(status != google.maps.GeocoderStatus.OK){
 						console.log("lookup encoded is:"+results[0].geometry.location);
 						results=false;
@@ -144,18 +144,18 @@ $(document).ready(function(){
 						origin: origin,
 						destination: destination,
 						unitSystem: google.maps.UnitSystem.IMPERIAL,
-						travelMode: google.maps.DirectionsTravelMode[self.prefs.travelMode]
+						travelMode: google.maps.DirectionsTravelMode[prefs.travelMode]
 					};
 					if(waypoints.length>1){
 						req[waypoints] = waypoints;
 					}
 					console.log('routing: ');
 					console.log(req);
-					self.route.service.route(req, function(response, status){
+					route.service.route(req, function(response, status){
 						console.log(response);
 						console.log(status);
 						if (status == google.maps.DirectionsStatus.OK){
-							self.route.display.setDirections(response);
+							route.display.setDirections(response);
 						}
 						else{// alert an error message when the route could nog be calculated.
 							if (status == 'ZERO_RESULTS') {
@@ -193,36 +193,37 @@ $(document).ready(function(){
 				while(this.store[name]){
 					name=name+"_";
 				}
-				self.marker.store[name] = new google.maps.Marker({
+				console.log[a,d];
+				this.store[name] = new google.maps.Marker({
 					position: location
-					,map: self.canvas
+					,map: canvas
 					,draggable: true
 				});
-				self.listener.markerClick[name]=google.maps.event.addListener(self.marker.store[name], 'click', function() {
+				listener.markerClick[name]=google.maps.event.addListener(this.store[name], 'click', function() {
 					//handle marker click
 				});
-				self.listener.markerDrop[name]=google.maps.event.addListener(self.marker.store[name], 'dragend', function() {
+				listener.markerDrop[name]=google.maps.event.addListener(this.store[name], 'dragend', function() {
 					//handle marker drop
 					console.log(this);
 				});
-				console.log(self.marker.store);
-				if(self.marker.store.length > 1){
-					self.route.store[name] = new google.maps.Polyline({
+				console.log(this.store);
+				if(this.store.length > 1){
+					route.store[name] = new google.maps.Polyline({
 						path: [new google.maps.LatLng(37.4419, -122.1419), new google.maps.LatLng(location)],
 						strokeColor: "#FF0000",
 						strokeOpacity: 1.0,
 						strokeWeight: 10,
-						map: self.canvas
+						map: canvas
 					});
 				}
 			},
 			removeMarker:function(targetMarker){
-				//console.log(self);
-				if(marker.store.length>0){
-					for(i in marker.store){
+				//console.log(this);
+				if(this.length>0){
+					for(i in this.store){
 						if (i == targetMarker) {
-							marker.store[i].setMap(null);
-							marker.store[i].splice(0,1);
+							this.store[i].setMap(null);
+							this.store[i].splice(0,1);
 						};
 					}
 				}
@@ -254,6 +255,8 @@ $(document).ready(function(){
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(6).kml',
 				     'http://massiveboom.com:3001/sampledata/6800-E-Tennessee-Ave(7).kml']
 		};
+		var a=this;
+		var d='dssddsds';
 		return {init:init};
 	})();
 	google.maps.event.addDomListener(window, 'load', function(){
