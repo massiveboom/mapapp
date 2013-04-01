@@ -187,7 +187,7 @@ $(document).ready(function(){
 								console.log("There was an unknown error in your request. Requeststatus: nn"+status);
 							}
 						}
-						cb(response,status);
+						utils.callback(response,status,cb);
 					});
 				}
 			}
